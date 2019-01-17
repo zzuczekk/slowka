@@ -8,6 +8,7 @@
 			<th scope="col">Nazwa</th>
 			<th scope="col">Miniatura</th>
 			<th scope="col">Zobacz</th>
+			<th scope="col">Edytuj</th>
 			<th scope="col">Usuń</th>
 		</tr>
 		</thead>
@@ -18,7 +19,13 @@
 				<td>{{ $subcategory->name }}</td>
 				<td><img src="{{ $category->picture_file_name }}"></td>
 				<td><a href="{{ route('showCategory', ['id' => $subcategory->id]) }}">Zobacz</a> </td>
-				<td><a href="{{ route('deleteCategory', ['id' => $subcategory->id]) }}">Usuń</a> </td>
+				<td>
+					<form action="{{ route('deleteCategory', ['id' => $subcategory->id]) }}" method="post">
+						<input class="btn btn-default" type="submit" value="Usuń" />
+						{!! method_field('delete') !!}
+						{!! csrf_field() !!}
+					</form>
+				</td>
 			</tr>
 		@endforeach
 		</tbody>

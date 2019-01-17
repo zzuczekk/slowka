@@ -2,34 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class CategoryController extends Controller
+class SubCategoryController extends Controller
 {
-    public function index()
-    {
-        $categories = Category::orderBy('name')
-            ->get();
-
-        return view('categories.index', [
-            'categories' => $categories
-        ]);
-    }
-
     public function delete(int $id)
     {
-        $category = Category::select(['id', 'name'])
+        $subCategory = Subcategory::select(['id', 'name'])
             ->find($id);
 
-        if ($category !== null) {
-            $category->subcategories()->delete();
-            $category->delete();
+        if ($subCategory !== null) {
+            $subCategory->subcategories()->delete();
+            $subCategory->delete();
             return redirect()->route('categories', [
                 'message' => [
                     'type' => 'success',
-                    'message' => 'Kategoria ' . $category->name . ' została usunięta.'
+                    'message' => 'Kategoria ' . $subCategory->name . ' została usunięta.'
                 ]
             ]);
         }
@@ -44,42 +34,38 @@ class CategoryController extends Controller
 
     public function show(int $id)
     {
-        $category = Category::with('subcategories')
+        $subCategory = Subcategory::with('subcategories')
             ->findOrFail($id);
 
         return view('categories.show', [
-            'category' => $category
+            'subCategory' => $subCategory
         ]);
-    }
-
-    public function add()
-    {
-        return view('categories.add');
     }
 
     public function insert(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:categories|min:3|max:100',
+            'name' => 'required|unique:subcategories|min:3|max:100',
             'description' => 'required|min:6',
         ]);
 
-        $category = new Category();
-        $category->name = $request->get('name');
-        $category->description = $request->get('description');
-        $category->picture_file_name = "";
+        $subCategory = new Subcategory();
+        $subCategory->categories_id = $request->get('id');
+        $subCategory->name = $request->get('name');
+        $subCategory->description = $request->get('description');
+        $subCategory->picture_file_name = "";
 
-        $category->save();
+        $subCategory->save();
 
         return redirect()->route('editCategory', [
-            'id' => $category->id
+            'id' => $request->get('id')
         ]);
 
     }
 
     public function edit($id)
     {
-        $category = Category::with('subcategories')
+        $category = Subcategory::with('subcategories')
             ->findOrFail($id);
 
         return view('categories.edit', [
@@ -92,13 +78,13 @@ class CategoryController extends Controller
         $request->validate([
             'name' => [
                 'required',
-                Rule::unique('categories')->ignore($id),
+                Rule::unique('subcategories')->ignore($id),
                 'min:3',
                 'max:100',
             ],
             'description' => 'required|min:6'
         ]);
-        $category = Category::findOrFail($id);
+        $category = Subcategory::findOrFail($id);
         $category->name = $request->get('name');
         $category->description = $request->get('description');
         $category->picture_file_name = "";
@@ -110,5 +96,4 @@ class CategoryController extends Controller
         ]);
 
     }
-
 }
