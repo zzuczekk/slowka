@@ -1,12 +1,14 @@
 @extends('layouts.app')
-
 @section('content')
+	@notification @endnotification
+	@if (Auth::check() && Auth::user()->hasRole(\App\Role::ROLES['ADMIN']))
 	<div class="row">
 		<div class="col-md-12 text-center mb-5">
 			<a class="btn btn-primary btn-lg" href="{{ route('addCategory') }}">Dodaj kategorie</a>
 		</div>
 
 	</div>
+	@endif
 	<table class="table table-striped">
 		<thead>
 		<tr>

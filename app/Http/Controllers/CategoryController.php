@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
@@ -24,22 +25,21 @@ class CategoryController extends Controller
             ->find($id);
 
         if ($category !== null) {
-            $category->subcategories()->delete();
             $category->delete();
-            return redirect()->route('categories', [
-                'message' => [
-                    'type' => 'success',
-                    'message' => 'Kategoria ' . $category->name . ' została usunięta.'
-                ]
+            Session::flash('notification', [
+                'type' => 'success',
+                'text' => 'Kategoria ' . $category->name . ' została usunięta.'
             ]);
+            
+            return redirect()->route('categories');
         }
 
-        return redirect()->route('categories', [
-            'message' => [
-                'type' => 'danger',
-                'message' => 'Kategoria o id ' . $id . ' nie istnieje.'
-            ]
+        Session::flash('notification', [
+            'type' => 'danger',
+            'text' => 'Kategoria o id ' . $id . ' nie istnieje.'
         ]);
+
+        return redirect()->route('categories');
     }
 
     public function show(int $id)
