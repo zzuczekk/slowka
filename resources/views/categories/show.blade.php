@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-	<table class="table table-striped">
+	<h1>{{ $category->name }}</h1>
+	<div>{{ $category->description }}</div>
+	<div style="max-width: 300px">
+		<img class="img-thumbnail" src="{{ asset('storage/' . $category->picture_file_name) }}">
+	</div>
+
+	<table class="table table-striped mt-3">
 		<thead>
 		<tr>
 			<th scope="col">LP</th>

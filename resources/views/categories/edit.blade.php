@@ -8,7 +8,7 @@
 			Edytuj kategorie
 		</div>
 		<div class="card-body">
-			<form action="{{ route('updateCategory', ['id' => $category->id]) }}" method="post" >
+			<form action="{{ route('updateCategory', ['id' => $category->id]) }}" method="post" enctype="multipart/form-data">
 				{!! csrf_field() !!}
 				{!! method_field('put') !!}
 				<div class="form-group">
@@ -19,6 +19,17 @@
 					<label for="exampleFormControlTextarea1">Opis</label>
 					<textarea class="form-control" name="description" rows="3" required>{{ $category->description }}</textarea>
 				</div>
+				<div>
+					<div class="form-group d-inline-block">
+						<label for="exampleInputFile">Miniatura</label>
+						<input type="file" class="form-control-file" name="image" aria-describedby="fileHelp">
+					</div>
+					<div class="d-inline-block" style="max-width: 100px">
+						<img class="img-thumbnail" src="{{ asset('storage/' . $category->picture_file_name) }}">
+					</div>
+				</div>
+
+
 				<button type="submit" class="btn btn-primary">Zapisz</button>
 			</form>
 		</div>

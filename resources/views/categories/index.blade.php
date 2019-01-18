@@ -25,7 +25,7 @@
 			<tr>
 				<td>{{ $loop->iteration }}</td>
 				<td>{{ $category->name }}</td>
-				<td><img src="{{ $category->picture_file_name }}"></td>
+				<td><img class="img-thumbnail" width="100px" src="{{ asset('storage/' . $category->picture_file_name) }}"></td>
 				<td><a class="btn btn-primary" href="{{ route('showCategory', ['id' => $category->id]) }}">Zobacz</a> </td>
 				<td><a class="btn btn-warning" href="{{ route('editCategory', ['id' => $category->id]) }}">Edytuj</a> </td>
 				<td>

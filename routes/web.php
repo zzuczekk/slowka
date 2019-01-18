@@ -32,4 +32,4 @@ Route::post('/subcategories', 'SubCategoryController@insert')->name('insertSubCa
 Route::get('/subcategories/edit/{id}', 'SubCategoryController@edit')->name('editSubCategory');
 Route::get('/subcategories/{id}', 'SubCategoryController@show')->name('showSubCategory');
 Route::delete('/subcategories/{id}', 'SubCategoryController@delete')->name('deleteSubCategory');
-Route::put('/subcategories/{id}', 'SubCategoryController@update')->name('updateCategory');
+Route::put('/subcategories/{id}', 'SubCategoryController@update')->name('updateSubCategory');

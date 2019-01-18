@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
@@ -30,7 +32,7 @@ class CategoryController extends Controller
                 'type' => 'success',
                 'text' => 'Kategoria ' . $category->name . ' została usunięta.'
             ]);
-            
+
             return redirect()->route('categories');
         }
 
@@ -62,12 +64,19 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|unique:categories|min:3|max:100',
             'description' => 'required|min:6',
+            'image' => 'required'
         ]);
 
         $category = new Category();
         $category->name = $request->get('name');
         $category->description = $request->get('description');
         $category->picture_file_name = "";
+
+        $category->save();
+        $extension = File::extension($request->file('image')->getClientOriginalName());
+
+        $path = $request->file('image')->storeAs('categories', $category->id . '.' . $extension);
+        $category->picture_file_name = $path;
 
         $category->save();
 
@@ -96,12 +105,19 @@ class CategoryController extends Controller
                 'min:3',
                 'max:100',
             ],
-            'description' => 'required|min:6'
+            'description' => 'required|min:6',
+            'file' => 'image'
         ]);
         $category = Category::findOrFail($id);
         $category->name = $request->get('name');
         $category->description = $request->get('description');
-        $category->picture_file_name = "";
+
+        if ($request->hasFile('image')) {
+            $extension = File::extension($request->file('image')->getClientOriginalName());
+
+            $path = $request->file('image')->storeAs('categories', $category->id . '.' . $extension);
+            $category->picture_file_name = $path;
+        }
 
         $category->save();
 
