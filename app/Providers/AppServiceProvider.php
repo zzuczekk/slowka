@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::component('components.validationErrors', 'validationErrors');
+        Blade::component('components.notification', 'notification');
     }
 
     /**
