@@ -9,7 +9,7 @@
 
 	</div>
 	@endif
-	<table class="table table-striped">
+	<table class="table table-responsive-sm table-striped">
 		<thead>
 		<tr>
 			<th scope="col">LP</th>
@@ -33,7 +33,7 @@
 					<td><a class="btn btn-warning" href="{{ route('editCategory', ['id' => $category->id]) }}">Edytuj</a> </td>
 					<td>
 						<form action="{{ route('deleteCategory', ['id' => $category->id]) }}" method="post">
-							<input class="btn btn-danger" type="submit" value="Usuń" />
+							<input class="btn btn-danger delete" type="submit" value="Usuń" />
 							<input type="hidden" name="_method" value="delete" />
 							{!! method_field('delete') !!}
 							{!! csrf_field() !!}

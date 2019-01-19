@@ -13,29 +13,115 @@
 
 use App\Role;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 Route::get('/', 'CategoryController@index')->name('categories');
-
 Route::get('/categories', 'CategoryController@index')->name('categories');
-Route::post('/categories', 'CategoryController@insert')->name('insertCategory')->middleware('checkRole:' . Role::ROLES['ADMIN']);
-Route::get('/categories/add', 'CategoryController@add')->name('addCategory')->middleware('checkRole:' . Role::ROLES['ADMIN']);
-Route::get('/categories/edit/{id}', 'CategoryController@edit')->name('editCategory')->middleware('checkRole:' . Role::ROLES['ADMIN']);
+Route::post('/categories', [
+    'uses' => 'CategoryController@insert',
+    'as' => 'insertCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN']]
+]);
+Route::get('/categories/add', [
+    'uses' => 'CategoryController@add',
+    'as' => 'addCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN']]
+]);
+Route::get('/categories/edit/{id}', [
+    'uses' => 'CategoryController@edit',
+    'as' => 'editCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN']]
+]);
 Route::get('/categories/{id}', 'CategoryController@show')->name('showCategory');
-Route::delete('/categories/{id}', 'CategoryController@delete')->name('deleteCategory')->middleware('checkRole:' . Role::ROLES['ADMIN']);
-Route::put('/categories/{id}', 'CategoryController@update')->name('updateCategory')->middleware('checkRole:' . Role::ROLES['ADMIN']);
+Route::delete('/categories', [
+    'uses' => 'CategoryController@delete',
+    'as' => 'deleteCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN']]
+]);
+Route::put('/categories', [
+    'uses' => 'CategoryController@update',
+    'as' => 'updateCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN']]
+]);
 
 
-Route::post('/subcategories', 'SubCategoryController@insert')->name('insertSubCategory');
-Route::get('/subcategories/edit/{id}', 'SubCategoryController@edit')->name('editSubCategory');
+
+
+Route::post('/subcategories', [
+    'uses' => 'SubCategoryController@insert',
+    'as' => 'insertSubCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR']]
+]);
+Route::get('/subcategories/edit/{id}', [
+    'uses' => 'SubCategoryController@edit',
+    'as' => 'editSubCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR']]
+]);
 Route::get('/subcategories/{id}', 'SubCategoryController@show')->name('showSubCategory');
-Route::delete('/subcategories/{id}', 'SubCategoryController@delete')->name('deleteSubCategory');
-Route::put('/subcategories/{id}', 'SubCategoryController@update')->name('updateSubCategory');
+Route::delete('/subcategories/{id}', [
+    'uses' => 'SubCategoryController@delete',
+    'as' => 'deleteSubCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR']]
+]);
+Route::put('/subcategories/{id}', [
+    'uses' => 'SubCategoryController@update',
+    'as' => 'updateSubCategory',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR']]
+]);
 
-Route::get('/users', 'UserController@index')->name('users')->middleware('checkRole:' . Role::ROLES['ADMIN']);
-Route::put('/users/{id}', 'UserController@update')->name('updateUser')->middleware('checkRole:' . Role::ROLES['ADMIN']);
+
+Route::post('/sets', [
+    'uses' => 'SetController@insert',
+    'as' => 'insertSet',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR'], Role::ROLES['EDITOR']]
+]);
+Route::delete('/sets/{id}', [
+    'uses' => 'SetController@delete',
+    'as' => 'deleteSet',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR'], Role::ROLES['EDITOR']]
+]);
+Route::get('/sets/{id}', 'SetController@show')->name('showSet');
+
+Route::get('/sets/edit/{id}', [
+    'uses' => 'SetController@edit',
+    'as' => 'editSet',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR'], Role::ROLES['EDITOR']]
+]);
+
+Route::put('/sets/{id}', [
+    'uses' => 'SetController@update',
+    'as' => 'updateSet',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN'], Role::ROLES['SUPER_EDITOR'], Role::ROLES['EDITOR']]
+]);
+
+
+
+Route::get('/users', [
+    'uses' => 'UserController@index',
+    'as' => 'users',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN']]
+]);
+
+Route::put('/users', [
+    'uses' => 'UserController@update',
+    'as' => 'updateUser',
+    'middleware' => 'roles',
+    'roles' => [Role::ROLES['ADMIN']]
+]);
+
+
 

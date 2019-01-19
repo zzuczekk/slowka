@@ -3,6 +3,9 @@
 @section('content')
 	@validationErrors
 	@endvalidationErrors
+	@notification
+	@endnotification
+
 	<div class="card">
 		<div class="card-header">
 			Edytuj kategorie
@@ -90,7 +93,7 @@
 						<td><a class="btn btn-warning" href="{{ route('editSubCategory', ['id' => $subCategory->id]) }}">Edytuj</a> </td>
 							<td>
 								<form action="{{ route('deleteSubCategory', ['id' => $subCategory->id]) }}" method="post">
-									<input class="btn btn-danger" type="submit" value="Usuń" />
+									<input class="btn btn-danger delete" type="submit" value="Usuń" />
 									<input type="hidden" name="_method" value="delete" />
 									{!! method_field('delete') !!}
 									{!! csrf_field() !!}

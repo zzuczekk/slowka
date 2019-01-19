@@ -26,7 +26,7 @@
 						@foreach($roles as $id => $name)
 							<div class="form-check form-check-inline">
 								<label class="form-check-label">
-									<input class="form-check-input" name="roles" type="checkbox" value="{{ $id }}" {{ $user->roles->where('id', $id)->count() ? 'checked' : ''}}> {{ $name }}
+									<input class="form-check-input" name="roles[]" type="checkbox" value="{{ $id }}" {{ $user->roles->where('id', $id)->count() ? 'checked' : ''}}> {{ $name }}
 								</label>
 							</div>
 						@endforeach

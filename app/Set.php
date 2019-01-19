@@ -13,11 +13,11 @@ class Set extends Model
 
     public function language1()
     {
-        return $this->hasMany(Language::class);
+        return $this->hasOne(Language::class, 'id', 'languages1_id');
     }
 
     public function language2()
     {
-        return $this->hasMany(Language::class);
+        return $this->hasOne(Language::class, 'id', 'languages2_id');
     }
 }
