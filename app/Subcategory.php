@@ -11,8 +11,8 @@ class Subcategory extends Model
 
     const DELETED_AT = 'deleted';
 
-    public function set()
+    public function sets()
     {
-        return $this->hasMany(Set::class);
+        return $this->hasMany(Set::class, 'subcategories_id');
     }
 }

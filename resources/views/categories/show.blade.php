@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+	@notification
+	@endnotification
 	<h1>{{ $category->name }}</h1>
 	<div>{{ $category->description }}</div>
 	<div style="max-width: 300px">
@@ -14,24 +16,30 @@
 			<th scope="col">Nazwa</th>
 			<th scope="col">Miniatura</th>
 			<th scope="col">Zobacz</th>
-			<th scope="col">Edytuj</th>
-			<th scope="col">Usuń</th>
+			@if (Auth::check() && Auth::user()->hasAnyRole([\App\Role::ROLES['ADMIN'], \App\Role::ROLES['SUPER_EDITOR']]))
+				<th scope="col">Edytuj</th>
+				<th scope="col">Usuń</th>
+			@endif
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($category->subcategories as $subcategory)
+		@foreach($category->subcategories as $subCategory)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>{{ $subcategory->name }}</td>
-				<td><img src="{{ $category->picture_file_name }}"></td>
-				<td><a href="{{ route('showCategory', ['id' => $subcategory->id]) }}">Zobacz</a> </td>
-				<td>
-					<form action="{{ route('deleteCategory', ['id' => $subcategory->id]) }}" method="post">
-						<input class="btn btn-default" type="submit" value="Usuń" />
-						{!! method_field('delete') !!}
-						{!! csrf_field() !!}
-					</form>
-				</td>
+				<td>{{ $subCategory->name }}</td>
+				<td><img class="img-thumbnail" width="100px" src="{{ asset('storage/' . $subCategory->picture_file_name) }}"></td>
+				<td><a class="btn btn-primary" href="{{ route('showSubCategory', ['id' => $subCategory->id]) }}">Zobacz</a> </td>
+				@if (Auth::check() && Auth::user()->hasAnyRole([\App\Role::ROLES['ADMIN'], \App\Role::ROLES['SUPER_EDITOR']]))
+					<td><a class="btn btn-warning" href="{{ route('editSubCategory', ['id' => $subCategory->id]) }}">Edytuj</a> </td>
+					<td>
+						<form action="{{ route('deleteSubCategory', ['id' => $subCategory->id]) }}" method="post">
+							<input class="btn btn-danger delete" type="submit" value="Usuń" />
+							<input type="hidden" name="_method" value="delete" />
+							{!! method_field('delete') !!}
+							{!! csrf_field() !!}
+						</form>
+					</td>
+				@endif
 			</tr>
 		@endforeach
 		</tbody>

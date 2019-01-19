@@ -3,6 +3,9 @@
 @section('content')
 	@validationErrors
 	@endvalidationErrors
+	@notification
+	@endnotification
+
 	<div class="card">
 		<div class="card-header">
 			Edytuj kategorie
@@ -40,7 +43,7 @@
 			Dodaj subkategorie
 		</div>
 		<div class="card-body">
-			<form action="{{ route('insertSubCategory') }}" method="post" >
+			<form action="{{ route('insertSubCategory') }}" method="post" enctype="multipart/form-data">
 				{!! csrf_field() !!}
 				<input type="hidden" name="id" value="{{ $category->id }}">
 				<div class="form-group">
@@ -50,6 +53,10 @@
 				<div class="form-group">
 					<label for="exampleFormControlTextarea1">Opis</label>
 					<textarea class="form-control" name="description" rows="3" required></textarea>
+				</div>
+				<div class="form-group">
+					<label for="exampleInputFile">Miniatura</label>
+					<input type="file" class="form-control-file" name="image" aria-describedby="fileHelp">
 				</div>
 				<button type="submit" class="btn btn-primary">Dodaj</button>
 
@@ -69,8 +76,10 @@
 					<th scope="col">Nazwa</th>
 					<th scope="col">Miniatura</th>
 					<th scope="col">Zobacz</th>
+					@if (Auth::check() && Auth::user()->hasAnyRole([\App\Role::ROLES['ADMIN'], \App\Role::ROLES['EDITOR']]))
 					<th scope="col">Edytuj</th>
-					<th scope="col">Usuń</th>
+						<th scope="col">Usuń</th>
+					@endif
 				</tr>
 				</thead>
 				<tbody>
@@ -78,17 +87,19 @@
 					<tr>
 						<td>{{ $loop->iteration }}</td>
 						<td>{{ $subCategory->name }}</td>
-						<td><img src="{{ $subCategory->picture_file_name }}"></td>
+						<td><img class="img-thumbnail" width="100px" src="{{ asset('storage/' . $subCategory->picture_file_name) }}"></td>
 						<td><a class="btn btn-primary" href="{{ route('showSubCategory', ['id' => $subCategory->id]) }}">Zobacz</a> </td>
+						@if (Auth::check() && Auth::user()->hasAnyRole([\App\Role::ROLES['ADMIN'], \App\Role::ROLES['EDITOR']]))
 						<td><a class="btn btn-warning" href="{{ route('editSubCategory', ['id' => $subCategory->id]) }}">Edytuj</a> </td>
-						<td>
-							<form action="{{ route('deleteSubCategory', ['id' => $subCategory->id]) }}" method="post">
-								<input class="btn btn-danger" type="submit" value="Usuń" />
-								<input type="hidden" name="_method" value="delete" />
-								{!! method_field('delete') !!}
-								{!! csrf_field() !!}
-							</form>
-						</td>
+							<td>
+								<form action="{{ route('deleteSubCategory', ['id' => $subCategory->id]) }}" method="post">
+									<input class="btn btn-danger delete" type="submit" value="Usuń" />
+									<input type="hidden" name="_method" value="delete" />
+									{!! method_field('delete') !!}
+									{!! csrf_field() !!}
+								</form>
+							</td>
+						@endif
 					</tr>
 				@endforeach
 				</tbody>
