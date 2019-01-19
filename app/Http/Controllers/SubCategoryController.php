@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 
 class SubCategoryController extends Controller
@@ -47,6 +48,7 @@ class SubCategoryController extends Controller
         $request->validate([
             'name' => 'required|unique:subcategories|min:3|max:100',
             'description' => 'required|min:6',
+            'image' => 'required|image'
         ]);
 
         $subCategory = new Subcategory();
@@ -54,6 +56,12 @@ class SubCategoryController extends Controller
         $subCategory->name = $request->get('name');
         $subCategory->description = $request->get('description');
         $subCategory->picture_file_name = "";
+
+        $subCategory->save();
+        $extension = File::extension($request->file('image')->getClientOriginalName());
+
+        $path = $request->file('image')->storeAs('subcategories', $subCategory->id . '.' . $extension);
+        $subCategory->picture_file_name = $path;
 
         $subCategory->save();
 

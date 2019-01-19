@@ -6,7 +6,6 @@ use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
@@ -64,7 +63,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|unique:categories|min:3|max:100',
             'description' => 'required|min:6',
-            'image' => 'required'
+            'image' => 'required|image'
         ]);
 
         $category = new Category();
